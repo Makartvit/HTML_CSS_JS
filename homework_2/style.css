@@ -1,3 +1,44 @@
 .style_1 {
     color: blue;
 }
+
+a[href^="https"] {
+    color: #f00;
+}
+
+
+ul ul li:first-child a {
+    color: #ff8d00;
+}
+
+
+ul + p {
+    font-size: 26px;
+}
+
+a[title] {
+    border: 1px solid green;
+}
+.text-box h3:first-of-type {
+    color: pink;
+}
+
+.text-box p:nth-of-type(2) {
+    color: grey;
+}
+
+.text-box div:nth-of-type(2) p {
+    color: red;
+}
+
+.text-box p:nth-of-type(3) {
+    color: green;
+}
+
+.text-box .yellow {
+    color: yellow;
+}
+
+.text-box #greycol {
+    color: initial;
+}
