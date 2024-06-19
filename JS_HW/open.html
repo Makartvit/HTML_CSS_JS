@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SWAPI Fetch Example</title>
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    td, th {
+      border: 1px solid #000;
+      padding: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>SWAPI Fetch Example</h1>
+  <div id="container"></div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      function displayJSONTable(domElement, json) {
+        domElement.innerHTML = ''; // Clear the element
+
+        const table = document.createElement('table');
+
+        for (let key in json) {
+          const row = document.createElement('tr');
+
+          const cellKey = document.createElement('td');
+          cellKey.textContent = key;
+
+          const cellValue = document.createElement('td');
+
+          if (typeof json[key] === 'string' && json[key].startsWith('https://swapi.dev/api/')) {
+            const button = document.createElement('button');
+            button.textContent = 'Fetch Data';
+            button.onclick = () => {
+              fetch(json[key])
+                .then(res => res.json())
+                .then(data => displayJSONTable(domElement, data));
+            };
+            cellValue.appendChild(button);
+          } else if (Array.isArray(json[key])) {
+            json[key].forEach(item => {
+              if (typeof item === 'string' && item.startsWith('https://swapi.dev/api/')) {
+                const button = document.createElement('button');
+                button.textContent = 'Fetch Data';
+                button.onclick = () => {
+                  fetch(item)
+                    .then(res => res.json())
+                    .then(data => displayJSONTable(domElement, data));
+                };
+                cellValue.appendChild(button);
+                cellValue.appendChild(document.createElement('br'));
+              } else {
+                const span = document.createElement('span');
+                span.textContent = item;
+                cellValue.appendChild(span);
+                cellValue.appendChild(document.createElement('br'));
+              }
+            });
+          } else {
+            cellValue.textContent = json[key];
+          }
+
+          row.appendChild(cellKey);
+          row.appendChild(cellValue);
+          table.appendChild(row);
+        }
+
+        domElement.appendChild(table);
+      }
+
+      // Fetch and display data
+      fetch('https://swapi.dev/api/people/1/')
+        .then(res => res.json())
+        .then(luke => {
+          const container = document.getElementById('container');
+          displayJSONTable(container, luke);
+        });
+    });
+  </script>
+</body>
+</html>
