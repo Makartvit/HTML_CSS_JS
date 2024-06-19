@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Form Example</title>
+</head>
+<body>
+  <script>
+    class LoginForm {
+      constructor(parent) {
+        this.parent = parent;
+        this.form = document.createElement('form');
+
+        this.loginInput = document.createElement('input');
+        this.loginInput.type = 'text';
+        this.loginInput.placeholder = 'Login';
+        this.loginInput.required = true;
+
+        this.passwordInput = document.createElement('input');
+        this.passwordInput.type = 'password';
+        this.passwordInput.placeholder = 'Password';
+        this.passwordInput.required = true;
+
+        this.submitButton = document.createElement('button');
+        this.submitButton.type = 'submit';
+        this.submitButton.textContent = 'Login';
+        this.submitButton.disabled = true;
+
+        this.form.appendChild(this.loginInput);
+        this.form.appendChild(this.passwordInput);
+        this.form.appendChild(this.submitButton);
+        this.parent.appendChild(this.form);
+
+        this.loginInput.addEventListener('input', () => this.validateForm());
+        this.passwordInput.addEventListener('input', () => this.validateForm());
+      }
+
+      validateForm() {
+        const isLoginValid = this.loginInput.value.trim() !== '';
+        const isPasswordValid = this.passwordInput.value.trim() !== '';
+        this.submitButton.disabled = !(isLoginValid && isPasswordValid);
+      }
+
+      onSubmit(callback) {
+        this.form.addEventListener('submit', (event) => {
+          event.preventDefault();
+          callback({
+            login: this.loginInput.value,
+            password: this.passwordInput.value
+          });
+        });
+      }
+    }
+
+    function loginPromise(parent) {
+      function executor(resolve, reject) {
+        const form = new LoginForm(parent);
+        form.onSubmit(({ login, password }) => {
+          resolve({ login, password });
+        });
+      }
+
+      return new Promise(executor);
+    }
+
+    loginPromise(document.body).then(({ login, password }) => {
+      console.log(`Ви ввели ${login} та ${password}`);
+    });
+  </script>
+</body>
+</html>

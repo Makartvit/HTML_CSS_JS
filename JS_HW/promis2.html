@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prompt Promise Example</title>
+</head>
+<body>
+  <h1>Prompt Promise Example</h1>
+  <button id="promptButton">Click me to Prompt</button>
+
+  <script>
+    function promptPromise(message) {
+      return new Promise((resolve, reject) => {
+        const result = prompt(message);
+        if (result !== null) {
+          resolve(result);
+        } else {
+          reject();
+        }
+      });
+    }
+
+    document.getElementById('promptButton').addEventListener('click', function() {
+      promptPromise("Як тебе звуть?")
+        .then(name => console.log(`Тебе звуть ${name}`))
+        .catch(() => console.log('Ну навіщо морозитися, нормально ж спілкувалися'));
+    });
+  </script>
+</body>
+</html>
